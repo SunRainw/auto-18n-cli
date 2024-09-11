@@ -1,0 +1,35 @@
+{
+  "include": [
+    "src",
+    "./i18n.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "package.json",
+    "dist"
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "declaration": true,
+    "target": "ESNext",
+    "module": "EsNext",
+    "moduleResolution": "Bundler",
+    "outDir": "dist",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": false,
+    "useUnknownInCatchVariables": false,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "noEmitOnError": false,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+    }
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+  },
+}

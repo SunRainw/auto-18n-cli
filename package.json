@@ -1,0 +1,56 @@
+{
+  "name": "auto-i18n-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx ./src/index.ts",
+    "build": "rollup --config"
+  },
+  "keywords": [],
+  "bin": {
+    "i18n": "./dist/cli.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.25.0",
+    "@babel/parser": "^7.25.3",
+    "@babel/template": "^7.25.0",
+    "@babel/traverse": "^7.25.3",
+    "@babel/types": "^7.25.2",
+    "@types/http-errors": "^2.0.4",
+    "@vue/compiler-sfc": "^3.4.38",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "http-errors": "^2.0.0",
+    "inquirer": "^10.2.0",
+    "limax": "^4.1.0",
+    "md5": "^2.3.0",
+    "mustache": "^4.2.0",
+    "nanoid": "^5.0.7",
+    "node-fetch": "^3.3.2",
+    "parse5": "^7.1.2",
+    "prettier": "^3.3.3",
+    "progress": "^2.0.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__template": "^7.4.4",
+    "@types/babel__traverse": "^7.20.6",
+    "@types/md5": "^2.3.5",
+    "@types/mustache": "^4.2.5",
+    "@types/node": "^22.1.0",
+    "@types/parse5": "^7.0.0",
+    "@types/prettier": "^3.0.0",
+    "@types/progress": "^2.0.7",
+    "rollup": "^4.21.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.17.0",
+    "typescript": "^5.5.4"
+  }
+}
