@@ -2,7 +2,6 @@ import { I18nImportType, LOCALE_VAR_TYPE } from "./transform";
 import type { langType, translateType } from "./translate";
 
 export interface IConfig {
-  config: string; // 插件配置的路径，默认i18n.config.ts
   entry: string[]; // 需要国际化处理的文件夹或文件
   exclude: string[]; // 需要排除的文件
   i18nImport: I18nImportType;

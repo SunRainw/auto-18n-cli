@@ -10,7 +10,7 @@ export default {
   localPath: "./locale", // 语言存放路径
   langs: ["en-US"], // 需要翻译的语言
   i18nMethod: "$t", // i18n 方法
-  generateStrategy: "random",
+  generateStrategy: "primitive",
   ignoreAttrs: ["style", "class", "id"],
   ignoreAnnotation: "i18n-ignore",
   ignoreMethods: [],
