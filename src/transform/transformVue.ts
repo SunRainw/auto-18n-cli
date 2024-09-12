@@ -39,27 +39,30 @@ const transformVue = async (
   // 获取template
   const template = parsed.descriptor.template?.content;
   const t = new TransformVueTemplate(template!, options);
+  await t.traverseVueTemplate();
   const templateCode = `<template>
   ${t.getTransformCode()}
   </template>`;
   const scriptObj = parsed.descriptor.script ?? parsed.descriptor.scriptSetup;
-  const { attrs, content: script } = scriptObj!;
-  const { code } = (await transformTsx(script, "", {
-    ...options,
-    isWrite: false,
-    isVueTemplate: false,
-    isTsx: false,
-    shouldImport: true,
-  }))!;
-  const scriptCode = getScriptCode(code, attrs);
-
+  let scriptCode = "";
+  if (scriptObj) {
+    const { attrs, content: script } = scriptObj;
+    const { code } = (await transformTsx(script, "", {
+      ...options,
+      isWrite: false,
+      isVueTemplate: false,
+      isTsx: false,
+      shouldImport: true,
+    }))!;
+    scriptCode = getScriptCode(code, attrs);
+  }
   const styleCode = getOtherCode(sourceCode.replace(template!, ""));
 
   const newCode = `${templateCode}\n${scriptCode}\n${styleCode}`;
   if (options.isWrite) {
     writeFile(filePath, newCode, "utf8");
   } else {
-    return { code };
+    return { code: newCode };
   }
 };
 

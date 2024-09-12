@@ -45,20 +45,41 @@ export function getRealI18nMethod(
   method: string,
   getString: boolean
 ): string | undefined;
+export function getRealI18nMethod(
+  method: string,
+  vueTempPrefix: string | false,
+  isVueTemplate: boolean
+): types.Identifier | types.MemberExpression | undefined;
 
 /**
  * 用户兼容用户传入的国际化方法 $t或者i18n.$t， 最多只能两级
  * @param method 用户传入的i18n方法，$t或者i18n.$t
  * @param getString 可选 返回ast对象还是string
+ * @param vueTempPrefix 可选 添加的前缀
  * @returns
  */
-export function getRealI18nMethod(method: string, getString?: boolean) {
+export function getRealI18nMethod(
+  method: string,
+  getString?: boolean | string,
+  isVueTemplate?: boolean
+) {
   if (!method) {
     console.log(chalk.red("国际化函数不能为空！"));
     throw new Error("A function cannot be empty");
   }
   const methods = method.split(".");
-  if (getString) return methods[0];
+  if (typeof getString === "boolean" && getString) return methods[0];
+  if (methods.length > 2) {
+    console.log(chalk.red("国际化函数最多只能为两级调用！"));
+    throw new Error("A function call can contain at most two levels");
+  }
+  const t = methods.length > 1 ? methods[1] : methods[0];
+  if (isVueTemplate && getString) {
+    return types.identifier(`${getString}${t}`);
+  }
+  if (isVueTemplate) {
+    return types.identifier(t);
+  }
   if (methods.length === 1) {
     return types.identifier(methods[0]);
   } else if (methods.length === 2) {
@@ -66,9 +87,6 @@ export function getRealI18nMethod(method: string, getString?: boolean) {
       types.identifier(methods[0]),
       types.identifier(methods[1])
     );
-  } else if (methods.length > 2) {
-    console.log(chalk.red("国际化函数最多只能为两级调用！"));
-    throw new Error("A function call can contain at most two levels");
   }
 }
 

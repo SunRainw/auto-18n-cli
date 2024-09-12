@@ -1,20 +1,40 @@
 {
-  "name": "auto-i18n-cli",
+  "name": "@rain/auto-i18n-cli",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/index.ts",
+  "description": "auto-i18n-cli 通过执行命令，自动提取和收集文字实现全局国际化，并且可以通过百度、有道、谷歌Api对收集的内容进行翻译",
+  "main": "dist/cli.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx ./src/index.ts",
     "build": "rollup --config"
   },
-  "keywords": [],
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "cli",
+    "intl",
+    "translate",
+    "locale",
+    "language",
+    "国际化",
+    "全球化",
+    "本地化",
+    "翻译"
+  ],
   "bin": {
     "i18n": "./dist/cli.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "SunRainw",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SunRainw/auto-18n-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/SunRainw/auto-18n-cli/issues"
+  },
+  "homepage": "https://github.com/SunRainw/auto-18n-cli#readme",
+  "license": "MIT",
   "dependencies": {
     "@babel/generator": "^7.25.0",
     "@babel/parser": "^7.25.3",

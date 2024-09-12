@@ -23,6 +23,7 @@ export interface IConfig {
     interval: number; // 翻译的间隔 ms， 默认为1000
   };
   prettierPath?: string; // prettier的地址，用于格式化，如果没有就不会进行格式化
+  vueTempPrefix: string | false
 }
 
 export interface ICliOptions {

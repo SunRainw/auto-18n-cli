@@ -44,9 +44,12 @@ class TransformVueTemplate {
     this.#toLowercase();
     this.#dealTemplateTag();
     this.#dealSelfClose();
-    this.#traverseHtml().then(() => {
+  }
+  traverseVueTemplate() {
+    return this.#traverseHtml().then(() => {
       this.#dealEscapeHtml();
       this.#resetToUppercase();
+      return true;
     });
   }
   #cacheTranslates(key: string, value: string) {
@@ -134,11 +137,18 @@ class TransformVueTemplate {
       isTsx: false,
       isWrite: false,
     }))!;
+    code = code.replace(/\n$/, "");
     // 在template里面不能是分号结尾
     if (code.endsWith(";")) {
       code = code.slice(0, -1);
     }
     return code;
+  }
+  #getMethod() {
+    const { vueTempPrefix, i18nMethod } = this.#options;
+    const i18nArr = i18nMethod.split(".");
+    const method = i18nArr.length > 1 ? i18nArr[1] : i18nArr[0];
+    return vueTempPrefix ? `${vueTempPrefix}${method}` : method;
   }
   /**
    * 核心，处理html
@@ -161,7 +171,7 @@ class TransformVueTemplate {
       }
     }
     // 处理指令、绑定、事件
-    if (isElement(node) && node.attrs.length > 0) {
+    if (isElement(node) && node.attrs?.length > 0) {
       const startLine = node.sourceCodeLocation?.startLine ?? 0;
       // 遇到注释就跳过
       if (this.#ignoreLines.includes(startLine)) return;
@@ -198,7 +208,8 @@ class TransformVueTemplate {
           }
         } else {
           const key = getGeneratorKey(value, this.#options);
-          attr.value = `${this.#options.i18nMethod}('${key}')`;
+          const method = this.#getMethod();
+          attr.value = `${method}('${key}')`;
           attr.name = `:${name}`;
           this.#cacheTranslates(key, value);
         }
@@ -228,9 +239,11 @@ class TransformVueTemplate {
             const t = tokenText.trim();
             const key = getGeneratorKey(t, this.#options);
             this.#cacheTranslates(key, t);
-            text += `{{${this.#options.i18nMethod}('${key}')}}`;
+            const method = this.#getMethod();
+            text += `{{${method}('${key}')}}`;
           } else if (tokenType === "name") {
-            text += `{{${this.#transformJs(tokenText)}}}`;
+            const temp = await this.#transformJs(tokenText);
+            text += `{{${temp}}}`;
           }
         }
       }

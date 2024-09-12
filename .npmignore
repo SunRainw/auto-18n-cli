@@ -1,0 +1,9 @@
+./src
+./tests
+rollup.config.js
+tsconfig.json
+pnpm-lock.yaml
+./locale
+node_modules
+.vscode
+.gitignore

@@ -185,8 +185,12 @@ export class Traverse {
   #getTraverseConfig = (
     callback?: (containChinese: boolean) => void
   ): TraverseOptions<types.Node> | false => {
-    const { i18nMethod } = this.#options;
-    const i18nIdentifier = getRealI18nMethod(i18nMethod);
+    const { i18nMethod, vueTempPrefix } = this.#options;
+    const i18nIdentifier = getRealI18nMethod(
+      i18nMethod,
+      vueTempPrefix,
+      this.#isVueTemplate
+    );
     if (i18nIdentifier) {
       return {
         ObjectExpression: (innerPath) => {
@@ -250,13 +254,15 @@ export class Traverse {
                 attrParent &&
                 ignoreAttrs?.includes(attrParent.node.name?.name as string)
               );
-              if (deal && type !== "CallExpression") {
+              if (deal && types.isExpressionStatement(innerPath.parent)) {
                 const inner = types.expressionStatement(callExpression);
                 innerPath.replaceWith(inner);
-              } else if (deal && types.isCallExpression(innerPath.parent)) {
+              } else if (deal) {
                 innerPath.replaceWith(callExpression);
               }
             }
+          } else {
+            innerPath.skip();
           }
         },
         JSXText: (innerPath) => {
@@ -329,7 +335,8 @@ export class Traverse {
           const curComment = comments?.find(
             (item) => item.loc?.end?.line === curLine - 1
           );
-          const { ignoreAnnotation, i18nMethod, ignoreMethods } = this.#options;
+          const { ignoreAnnotation, i18nMethod, ignoreMethods, vueTempPrefix } =
+            this.#options;
           if (
             curComment &&
             ignoreAnnotation &&
@@ -344,8 +351,16 @@ export class Traverse {
           } else if (types.isIdentifier(callee)) {
             methodName = callee.name;
           }
+          const methods = i18nMethod.split(".");
+          const t = methods.length > 1 ? methods[1] : methods[0];
+          const nMethod =
+            vueTempPrefix && this.#isVueTemplate
+              ? `${vueTempPrefix}${t}`
+              : this.#isVueTemplate
+                ? t
+                : i18nMethod;
           // 排除已经翻译
-          if (methodName === i18nMethod) innerPath.skip();
+          if (methodName === nMethod) innerPath.skip();
           // 排除需要忽略的函数
           if (ignoreMethods.includes(methodName)) innerPath.skip();
         },

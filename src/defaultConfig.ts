@@ -14,4 +14,5 @@ export default {
   ignoreAttrs: ["style", "class", "id"],
   ignoreAnnotation: "i18n-ignore",
   ignoreMethods: [],
+  vueTempPrefix: "$",
 };

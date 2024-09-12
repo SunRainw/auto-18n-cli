@@ -23,6 +23,7 @@ export const transform = async (
     total: paths.length,
   });
   for (const p of paths) {
+    console.info(p)
     const ext = path.extname(p);
     const code = await readFile(p, { encoding: "utf8" });
     switch (ext) {
